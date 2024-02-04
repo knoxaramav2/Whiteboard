@@ -70,5 +70,10 @@ namespace Whiteboard
                 CharacterPortrait.BackgroundImage = ImageHelper.Resize(img, sz.Width, sz.Height);
             }
         }
+
+        private void SaveAsCtx_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

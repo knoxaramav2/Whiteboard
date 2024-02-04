@@ -35,12 +35,12 @@ namespace Whiteboard
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(WhiteboardForm));
             menuStrip1 = new MenuStrip();
             fileToolStripMenuItem = new ToolStripMenuItem();
-            newToolStripMenuItem = new ToolStripMenuItem();
-            openToolStripMenuItem = new ToolStripMenuItem();
+            NewCtx = new ToolStripMenuItem();
+            OpenCtx = new ToolStripMenuItem();
             toolStripSeparator1 = new ToolStripSeparator();
-            saveToolStripMenuItem = new ToolStripMenuItem();
+            SaveCtx = new ToolStripMenuItem();
             toolStripSeparator2 = new ToolStripSeparator();
-            exitToolStripMenuItem = new ToolStripMenuItem();
+            ExitCtx = new ToolStripMenuItem();
             helpToolStripMenuItem = new ToolStripMenuItem();
             aboutToolStripMenuItem = new ToolStripMenuItem();
             flowPanelContext = new ContextMenuStrip(components);
@@ -73,6 +73,7 @@ namespace Whiteboard
             xcNode2 = new XCNode();
             xcNode1 = new XCNode();
             ImageDialog = new OpenFileDialog();
+            SaveAsCtx = new ToolStripMenuItem();
             DeleteRowBtn = new Button();
             menuStrip1.SuspendLayout();
             flowPanelContext.SuspendLayout();
@@ -120,48 +121,51 @@ namespace Whiteboard
             // 
             // fileToolStripMenuItem
             // 
-            fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { newToolStripMenuItem, openToolStripMenuItem, toolStripSeparator1, saveToolStripMenuItem, toolStripSeparator2, exitToolStripMenuItem });
+            fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { NewCtx, OpenCtx, toolStripSeparator1, SaveCtx, SaveAsCtx, toolStripSeparator2, ExitCtx });
             fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             fileToolStripMenuItem.Size = new Size(37, 20);
             fileToolStripMenuItem.Text = "File";
             // 
-            // newToolStripMenuItem
+            // NewCtx
             // 
-            newToolStripMenuItem.Name = "newToolStripMenuItem";
-            newToolStripMenuItem.Size = new Size(103, 22);
-            newToolStripMenuItem.Text = "New";
-            newToolStripMenuItem.Click += NewToolStripMenuItem_Click;
+            NewCtx.Name = "NewCtx";
+            NewCtx.ShortcutKeys = Keys.Control | Keys.Shift | Keys.N;
+            NewCtx.Size = new Size(180, 22);
+            NewCtx.Text = "New";
+            NewCtx.Click += NewToolStripMenuItem_Click;
             // 
-            // openToolStripMenuItem
+            // OpenCtx
             // 
-            openToolStripMenuItem.Name = "openToolStripMenuItem";
-            openToolStripMenuItem.Size = new Size(103, 22);
-            openToolStripMenuItem.Text = "Open";
-            openToolStripMenuItem.Click += OpenToolStripMenuItem_Click;
+            OpenCtx.Name = "OpenCtx";
+            OpenCtx.ShortcutKeys = Keys.Control | Keys.O;
+            OpenCtx.Size = new Size(180, 22);
+            OpenCtx.Text = "Open";
+            OpenCtx.Click += OpenToolStripMenuItem_Click;
             // 
             // toolStripSeparator1
             // 
             toolStripSeparator1.Name = "toolStripSeparator1";
-            toolStripSeparator1.Size = new Size(100, 6);
+            toolStripSeparator1.Size = new Size(177, 6);
             // 
-            // saveToolStripMenuItem
+            // SaveCtx
             // 
-            saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            saveToolStripMenuItem.Size = new Size(103, 22);
-            saveToolStripMenuItem.Text = "Save";
-            saveToolStripMenuItem.Click += SaveToolStripMenuItem_Click;
+            SaveCtx.Name = "SaveCtx";
+            SaveCtx.ShortcutKeys = Keys.Control | Keys.S;
+            SaveCtx.Size = new Size(180, 22);
+            SaveCtx.Text = "Save";
+            SaveCtx.Click += SaveToolStripMenuItem_Click;
             // 
             // toolStripSeparator2
             // 
             toolStripSeparator2.Name = "toolStripSeparator2";
-            toolStripSeparator2.Size = new Size(100, 6);
+            toolStripSeparator2.Size = new Size(177, 6);
             // 
-            // exitToolStripMenuItem
+            // ExitCtx
             // 
-            exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            exitToolStripMenuItem.Size = new Size(103, 22);
-            exitToolStripMenuItem.Text = "Exit";
-            exitToolStripMenuItem.Click += ExitToolStripMenuItem_Click;
+            ExitCtx.Name = "ExitCtx";
+            ExitCtx.Size = new Size(180, 22);
+            ExitCtx.Text = "Exit";
+            ExitCtx.Click += ExitToolStripMenuItem_Click;
             // 
             // helpToolStripMenuItem
             // 
@@ -531,6 +535,14 @@ namespace Whiteboard
             xcNode1.Text = "xcNode1";
             xcNode1.UseVisualStyleBackColor = false;
             // 
+            // SaveAsCtx
+            // 
+            SaveAsCtx.Name = "SaveAsCtx";
+            SaveAsCtx.ShortcutKeys = Keys.Control | Keys.Shift | Keys.S;
+            SaveAsCtx.Size = new Size(186, 22);
+            SaveAsCtx.Text = "Save As";
+            SaveAsCtx.Click += SaveAsCtx_Click;
+            // 
             // WhiteboardForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -575,12 +587,12 @@ namespace Whiteboard
         private MenuStrip menuStrip1;
         private ContextMenuStrip flowPanelContext;
         private ToolStripMenuItem fileToolStripMenuItem;
-        private ToolStripMenuItem newToolStripMenuItem;
-        private ToolStripMenuItem openToolStripMenuItem;
+        private ToolStripMenuItem NewCtx;
+        private ToolStripMenuItem OpenCtx;
         private ToolStripSeparator toolStripSeparator1;
-        private ToolStripMenuItem saveToolStripMenuItem;
+        private ToolStripMenuItem SaveCtx;
         private ToolStripSeparator toolStripSeparator2;
-        private ToolStripMenuItem exitToolStripMenuItem;
+        private ToolStripMenuItem ExitCtx;
         private ToolStripMenuItem helpToolStripMenuItem;
         private ToolStripMenuItem aboutToolStripMenuItem;
         private TabControl AuxControls;
@@ -612,5 +624,6 @@ namespace Whiteboard
         private Label label5;
         private TextBox textBox3;
         private ComboBox CharacterInfoSelect;
+        private ToolStripMenuItem SaveAsCtx;
     }
 }
