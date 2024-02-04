@@ -270,6 +270,7 @@ namespace Whiteboard
             FlowPanel.Controls.Add(xcNode2);
             FlowPanel.Controls.Add(xcNode1);
             FlowPanel.Dock = DockStyle.Fill;
+            FlowPanel.FwdNodes = null;
             FlowPanel.Location = new Point(3, 3);
             FlowPanel.Name = "FlowPanel";
             FlowPanel.Offset = new Point(0, 0);
@@ -278,9 +279,12 @@ namespace Whiteboard
             // 
             // xcNode2
             // 
-            xcNode2.BackColor = Color.Transparent;
+            xcNode2.BackColor = Color.Silver;
+            xcNode2.BackgroundImageLayout = ImageLayout.None;
             xcNode2.BaseDim = new Point(0, 0);
             xcNode2.Drag = false;
+            xcNode2.FlatAppearance.BorderSize = 0;
+            xcNode2.FlatStyle = FlatStyle.Flat;
             xcNode2.LastMousePosition = new Point(0, 0);
             xcNode2.Location = new Point(193, 149);
             xcNode2.Name = "xcNode2";
@@ -292,9 +296,12 @@ namespace Whiteboard
             // 
             // xcNode1
             // 
-            xcNode1.BackColor = Color.Transparent;
+            xcNode1.BackColor = Color.Silver;
+            xcNode1.BackgroundImageLayout = ImageLayout.None;
             xcNode1.BaseDim = new Point(0, 0);
             xcNode1.Drag = false;
+            xcNode1.FlatAppearance.BorderSize = 0;
+            xcNode1.FlatStyle = FlatStyle.Flat;
             xcNode1.ForeColor = SystemColors.ControlText;
             xcNode1.LastMousePosition = new Point(0, 0);
             xcNode1.Location = new Point(340, 3);
@@ -305,7 +312,7 @@ namespace Whiteboard
             xcNode1.Text = "xcNode1";
             xcNode1.UseVisualStyleBackColor = false;
             // 
-            // Whiteboard
+            // WhiteboardForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -315,7 +322,7 @@ namespace Whiteboard
             Controls.Add(menuStrip1);
             KeyPreview = true;
             MainMenuStrip = menuStrip1;
-            Name = "Whiteboard";
+            Name = "WhiteboardForm";
             Text = "Whiteboard";
             Load += Whiteboard_Load;
             menuStrip1.ResumeLayout(false);

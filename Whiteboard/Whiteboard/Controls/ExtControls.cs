@@ -14,6 +14,9 @@ namespace Whiteboard.Controls
         void Pan(int dx, int dy);
         void SetPosition(int x, int y);
         void Init();
+        void SetSelect(bool state);
+        void CoupleControl(IXControl control) { if (!FwdNodes.Contains(control)) { FwdNodes.Add(control); } }
+        bool DecoupleControl(IXControl control) { return FwdNodes.Remove(control); }
     }
 
     public interface IXContainer
@@ -32,6 +35,9 @@ namespace Whiteboard.Controls
         public Point BaseDim { get; set; }
         public bool Drag { get; set; }
 
+        private readonly Color UnselectColor = Color.Silver;
+        private readonly Color SelectColor = Color.SeaGreen;
+
         public List<IXControl> FwdNodes { get; private set; }
 
         public XCNode()
@@ -45,8 +51,10 @@ namespace Whiteboard.Controls
             BaseDim = new Point(Size.Width, Size.Height);
             IXParent = Parent is IXControl control ? control : null;
             Offset = Location;
-            BackColor = Color.Transparent;
+            BackColor = Color.Silver;
             ForeColor = Color.Black;
+            FlatStyle = FlatStyle.Flat;
+            FlatAppearance.BorderSize = 0;
         }
 
         public void SetPosition(int x, int y)
@@ -120,6 +128,11 @@ namespace Whiteboard.Controls
         {
             return FwdNodes.Contains(control);
         }
+
+        public void SetSelect(bool state)
+        {
+            BackColor = state ? SelectColor : UnselectColor;
+        }
     }
 
     public class XCPanel : Panel, IXControl, IXContainer
@@ -163,11 +176,12 @@ namespace Whiteboard.Controls
             BMBuffer = new Bitmap(Width, Height);
             GBuffer = Graphics.FromImage(BMBuffer);
             GBuffer.Clear(Color.Transparent);
-            foreach (var ctrl in Controls)
+            FwdNodes ??= [];
+            foreach (Control ctrl in Controls)
             {
                 if (ctrl is not IXControl) { continue; }
                 ((IXControl)ctrl).Init();
-                FwdNodes.Add((IXControl)ctrl);
+                ((IXControl)this).CoupleControl((IXControl)ctrl);
             }
         }
 
@@ -255,22 +269,29 @@ namespace Whiteboard.Controls
 
         public void SetSelected(IXControl selection)
         {
-            if (ModifierKeys == Keys.Shift && Selected != null)
+            if (Selected == selection) { return; }
+            if (Selected == null) 
+            { 
+                Selected = selection;
+                Selected.SetSelect(true);
+                return;
+            }
+
+            if (ModifierKeys == Keys.Shift)
             {
-                if (!selection.Contains(Selected) && !Selected.Contains(selection) && Selected != selection)
+                if (IsBound(Selected, selection))
                 {
-                    Selected.FwdNodes.Add(selection);
-                    Debug.WriteLine($"LINK: {Selected} -> {selection}");
+                    Decouple(selection, Selected);
+                } else
+                {
+                    Selected.CoupleControl(selection);
                 }
-            }
-
-            if (Selected != null && Selected != selection)
+            } else
             {
-                ((Control)Selected).ForeColor = Color.Black;
+                Selected?.SetSelect(false);
+                Selected = selection;
+                Selected.SetSelect(true);
             }
-
-            Selected = selection;
-            ((Control)Selected).ForeColor = Color.Red;
         }
 
         protected override void OnPaint(PaintEventArgs e)
@@ -282,6 +303,16 @@ namespace Whiteboard.Controls
         public bool Contains(IXControl control)
         {
             return FwdNodes.Contains(control);
+        }
+
+        public static bool IsBound(IXControl c1, IXControl c2)
+        {
+            return c1.Contains(c2) || c2.Contains(c1);
+        }
+
+        public static bool Decouple(IXControl c1, IXControl c2)
+        {
+            return c1.DecoupleControl(c2) || c2.DecoupleControl(c1);
         }
 
         public void UpdateDraw()
@@ -307,6 +338,11 @@ namespace Whiteboard.Controls
             }
 
             Refresh();
+        }
+
+        public void SetSelect(bool state = false)
+        {
+            throw new NotImplementedException();
         }
     }
 }
