@@ -24,5 +24,6 @@ namespace Whiteboard.Util
         {
             return Math.Atan2(p1.Y-p2.Y, p1.X-p2.X);
         }
+
     }
 }

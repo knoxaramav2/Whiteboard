@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Reflection.Metadata.Ecma335;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using Whiteboard.Util;
@@ -12,12 +13,21 @@ namespace Whiteboard
 {
     public interface IXControl
     {
+        List<IXControl> FwdNodes { get; }
+        bool Contains(IXControl control);
         IXControl? IXParent { get; }
         Point Offset { get; }
         void Zoom(float scale);
         void Pan(int dx, int dy);
         void SetPosition(int x, int y);
         void Init();
+    }
+
+    public interface IXContainer
+    {
+        IXControl? Selected { get; }
+        void SetSelected(IXControl selection);
+        void UpdateDraw();
     }
 
     public class XCNode : Button, IXControl
@@ -29,9 +39,12 @@ namespace Whiteboard
         public Point BaseDim { get; set; }
         public bool Drag { get; set; }
 
+        public List<IXControl> FwdNodes { get; private set; }
+
         public XCNode()
         {
             Drag = false;
+            FwdNodes = [];
         }
 
         public void Init()
@@ -39,6 +52,8 @@ namespace Whiteboard
             BaseDim = new Point(Size.Width, Size.Height);
             IXParent = Parent is IXControl control ? control : null;
             Offset = Location;
+            BackColor = Color.Transparent;
+            ForeColor = Color.Black;
         }
 
         public void SetPosition(int x, int y)
@@ -71,7 +86,7 @@ namespace Whiteboard
         {
             var grPath = new GraphicsPath();
             grPath.AddEllipse(0, 0, ClientSize.Width, ClientSize.Height);
-            this.Region = new Region(grPath);
+            Region = new Region(grPath);
             base.OnPaint(e);
         }
 
@@ -86,6 +101,9 @@ namespace Whiteboard
             Drag = true;
             LastMousePosition = e.Location;
             LastDelta = new(0, 0);
+
+            if (Parent is IXContainer parent) { parent.SetSelected(this); }
+
             base.OnMouseDown(e);
         }
 
@@ -99,69 +117,87 @@ namespace Whiteboard
                 Pan(diff.X, diff.Y);
                 LastMousePosition = e.Location;
                 LastDelta = diff;
+                if (Parent is IXContainer cxpar) { cxpar.UpdateDraw(); }
             }
 
             base.OnMouseMove(e);
         }
+
+        public bool Contains(IXControl control)
+        {
+            return FwdNodes.Contains(control);
+        }
     }
 
-    public class XCPanel : Panel, IXControl
+    public class XCPanel : Panel, IXControl, IXContainer
     {
+        private Bitmap BMBuffer;
+        private Graphics GBuffer;
         public Button follow;
         public IXControl? IXParent { get; private set; }
         public Point Offset { get; set; }
         private Point LastPosition;
         private bool Drag { get; set; }
         private float CurrScale { get; set; }
+        public IXControl? Selected { get; private set; }
+        public List<IXControl> FwdNodes { get; set; }
         const float SCALE_CONST = 0.05f;
 
         public XCPanel()
         {
             LastPosition = new Point(0, 0);
+            Selected = null;
             Drag = false;
             CurrScale = 1f;
-            follow = new Button();
-            follow.Size = new Size(30, 30);
-            follow.BackColor = Color.Black;
-            follow.Location = Offset;
-            follow.Text = "CRN";
-            follow.UseVisualStyleBackColor = true;
-            //Controls.Add(follow);
+            DoubleBuffered = true;
+            BMBuffer = new(1 ,1);
+            GBuffer = Graphics.FromImage(BMBuffer);
+            FwdNodes = [];
+
+            follow = new Button
+            {
+                Size = new Size(30, 30),
+                BackColor = Color.Black,
+                Location = Offset,
+                Text = "CRN",
+                UseVisualStyleBackColor = true
+            };
         }
 
         public void Init()
         {
             IXParent = Parent is IXControl control ? control : null;
+            BMBuffer = new Bitmap(Width, Height);
+            GBuffer = Graphics.FromImage(BMBuffer);
+            GBuffer.Clear(Color.Transparent);
             foreach (var ctrl in Controls)
             {
                 if (ctrl is not IXControl) { continue; }
                 ((IXControl)ctrl).Init();
+                FwdNodes.Add((IXControl)ctrl);
             }
         }
 
         public void Pan(int dx, int dy)
         {
             if (!Drag) { return; }
-            var dxy = new Point((int)dx, (int)dy);
+            var dxy = new Point(dx, dy);
             Offset = Offset.Add(dxy);
-            Debug.WriteLine($"{Offset}");
-            foreach (var ctrl in Controls)
+            foreach (var ctrl in FwdNodes)
             {
-                if (ctrl is not IXControl) { continue; }
-                ((IXControl)ctrl).Pan(dx, dy);
+                ctrl.Pan(dx, dy);
             }
+            UpdateDraw();
         }
 
         public void Zoom(float amount)
         {
             CurrScale = Math.Clamp(CurrScale + amount, 0.1f, 5f);
-            Debug.WriteLine($"SCALE: {CurrScale}");
-            foreach (var r_ctrl in Controls)
+            foreach (var ctrl in FwdNodes)
             {
-                if (r_ctrl is not IXControl) { continue; }
-                var ctrl = (IXControl)r_ctrl;
                 ctrl.Zoom(CurrScale);
             }
+            UpdateDraw();
         }
 
         protected override void OnMouseUp(MouseEventArgs e)
@@ -199,14 +235,85 @@ namespace Whiteboard
             base.OnMouseWheel(e);
         }
 
-        protected override void OnPaint(PaintEventArgs e)
-        {
-            base.OnPaint(e);
-        }
-
         public void SetPosition(int x, int y)
         {
             Offset = new Point(x, y);
+        }
+    
+        public void AddNode(string text="")
+        {
+            var cSz = (int)(75 * CurrScale);
+            var node = new XCNode
+            {
+                Size = new(cSz, cSz),
+                Text = text,
+                Parent = this,
+                Location = new Point(0, 0),
+            };
+            node.Init();
+            node.Zoom(CurrScale);
+            if (Parent != null)
+            {
+                node.SetPosition(Parent.Width / 2, Parent.Height / 2);
+            }
+            Controls.Add(node);
+            FwdNodes.Add(node);
+        }
+
+        public void SetSelected(IXControl selection)
+        {
+            if (ModifierKeys == Keys.Shift && Selected != null)
+            {
+                if (!selection.Contains(Selected) && !Selected.Contains(selection) && Selected != selection)
+                {
+                    Selected.FwdNodes.Add(selection);
+                    Debug.WriteLine($"LINK: {Selected} -> {selection}");
+                }
+            }
+
+            if (Selected != null && Selected != selection)
+            {
+                ((Control)Selected).ForeColor = Color.Black;
+            }
+
+            Selected = selection;
+            ((Control)Selected).ForeColor = Color.Red;
+        }
+
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            e.Graphics.DrawImage(BMBuffer, 0, 0);
+            base.OnPaint(e);
+        }
+
+        public bool Contains(IXControl control)
+        {
+            return FwdNodes.Contains(control);
+        }
+
+        public void UpdateDraw()
+        {
+            var pen = new Pen(Color.Red, 3f);
+            var curve = .3f;
+            GBuffer.Clear(Color.Transparent);
+            foreach (XCNode pnt in FwdNodes.Cast<XCNode>())
+            {
+                var nodes = pnt.FwdNodes.Cast<XCNode>();
+                var start = pnt.Location.Add(new Point(pnt.Width / 2, pnt.Height / 2));
+
+                foreach (XCNode node in nodes)
+                {
+                    var end = node.Location.Add(new Point(node.Width / 2, node.Height / 2));
+                    var dist = GeomHelper.Dist(start, end) * curve;
+                    var angle = GeomHelper.Angle(start, end);
+                    var lp1 = new Point((int)(start.X + dist), (int)(start.Y - dist));
+                    var lp2 = new Point((int)(end.X - dist), (int)(end.Y + dist));
+                    Debug.WriteLine($"{start}, {start}, {end}, {end} | {angle}::{dist}");
+                    GBuffer.DrawBezier(pen, start, lp1, lp2, end);
+                }
+            }
+
+            Refresh();
         }
     }
 }

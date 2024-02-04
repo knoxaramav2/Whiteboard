@@ -1,5 +1,7 @@
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
+using Whiteboard.Controls;
 
 namespace Whiteboard
 {
@@ -51,9 +53,10 @@ namespace Whiteboard
             //FlowPane.Coll
         }
 
-        private void FlowPanel_MouseClick(object sender, MouseEventArgs e)
+        private void FlowPanelNewNode_Click(object sender, EventArgs e)
         {
-            Debug.WriteLine($"R:{e.Delta} | BTN:{e.Button}");
+            var res = Prompts.NewNodeDialog("Create new flow node", "Create");
+            if (!string.IsNullOrEmpty(res)) { FlowPanel.AddNode(res); }
         }
     }
 }

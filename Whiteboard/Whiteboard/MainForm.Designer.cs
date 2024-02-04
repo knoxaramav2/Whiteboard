@@ -28,6 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Whiteboard));
             menuStrip1 = new MenuStrip();
             fileToolStripMenuItem = new ToolStripMenuItem();
             newToolStripMenuItem = new ToolStripMenuItem();
@@ -38,22 +40,27 @@
             exitToolStripMenuItem = new ToolStripMenuItem();
             helpToolStripMenuItem = new ToolStripMenuItem();
             aboutToolStripMenuItem = new ToolStripMenuItem();
+            flowPanelContext = new ContextMenuStrip(components);
+            flowPanelNewNode = new ToolStripMenuItem();
             AuxControls = new TabControl();
             tabPage1 = new TabPage();
             panel1 = new Panel();
             HistorySlider = new TrackBar();
             EditorPanels = new TabControl();
             CharactersPane = new TabPage();
+            CharacterPanel = new Panel();
             FlowPane = new TabPage();
             FlowPanel = new XCPanel();
             xcNode2 = new XCNode();
             xcNode1 = new XCNode();
             menuStrip1.SuspendLayout();
+            flowPanelContext.SuspendLayout();
             AuxControls.SuspendLayout();
             tabPage1.SuspendLayout();
             panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)HistorySlider).BeginInit();
             EditorPanels.SuspendLayout();
+            CharactersPane.SuspendLayout();
             FlowPane.SuspendLayout();
             FlowPanel.SuspendLayout();
             SuspendLayout();
@@ -126,6 +133,20 @@
             aboutToolStripMenuItem.Text = "About";
             aboutToolStripMenuItem.Click += AboutToolStripMenuItem_Click;
             // 
+            // flowPanelContext
+            // 
+            flowPanelContext.Items.AddRange(new ToolStripItem[] { flowPanelNewNode });
+            flowPanelContext.Name = "FlowPanelContext";
+            flowPanelContext.Size = new Size(174, 26);
+            // 
+            // flowPanelNewNode
+            // 
+            flowPanelNewNode.Name = "flowPanelNewNode";
+            flowPanelNewNode.ShortcutKeys = Keys.Control | Keys.N;
+            flowPanelNewNode.Size = new Size(173, 22);
+            flowPanelNewNode.Text = "New Node";
+            flowPanelNewNode.Click += FlowPanelNewNode_Click;
+            // 
             // AuxControls
             // 
             AuxControls.Controls.Add(tabPage1);
@@ -181,12 +202,22 @@
             // CharactersPane
             // 
             CharactersPane.BackColor = Color.Transparent;
+            CharactersPane.Controls.Add(CharacterPanel);
             CharactersPane.Location = new Point(4, 24);
             CharactersPane.Name = "CharactersPane";
             CharactersPane.Padding = new Padding(3);
             CharactersPane.Size = new Size(792, 276);
             CharactersPane.TabIndex = 0;
             CharactersPane.Text = "Characters";
+            // 
+            // CharacterPanel
+            // 
+            CharacterPanel.BackColor = Color.RosyBrown;
+            CharacterPanel.Dock = DockStyle.Fill;
+            CharacterPanel.Location = new Point(3, 3);
+            CharacterPanel.Name = "CharacterPanel";
+            CharacterPanel.Size = new Size(786, 270);
+            CharacterPanel.TabIndex = 0;
             // 
             // FlowPane
             // 
@@ -202,38 +233,46 @@
             // FlowPanel
             // 
             FlowPanel.BackColor = Color.SteelBlue;
+            FlowPanel.BorderStyle = BorderStyle.FixedSingle;
+            FlowPanel.ContextMenuStrip = flowPanelContext;
             FlowPanel.Controls.Add(xcNode2);
             FlowPanel.Controls.Add(xcNode1);
             FlowPanel.Dock = DockStyle.Fill;
+            FlowPanel.FwdNodes = (List<Whiteboard.IXControl>)resources.GetObject("FlowPanel.FwdNodes");
             FlowPanel.Location = new Point(3, 3);
             FlowPanel.Name = "FlowPanel";
+            FlowPanel.Offset = new Point(0, 0);
             FlowPanel.Size = new Size(786, 270);
             FlowPanel.TabIndex = 0;
-            FlowPanel.MouseClick += FlowPanel_MouseClick;
             // 
             // xcNode2
             // 
+            xcNode2.BackColor = Color.Transparent;
             xcNode2.BaseDim = new Point(0, 0);
             xcNode2.Drag = false;
             xcNode2.LastMousePosition = new Point(0, 0);
             xcNode2.Location = new Point(193, 149);
             xcNode2.Name = "xcNode2";
+            xcNode2.Offset = new Point(0, 0);
             xcNode2.Size = new Size(75, 75);
             xcNode2.TabIndex = 1;
             xcNode2.Text = "xcNode2";
-            xcNode2.UseVisualStyleBackColor = true;
+            xcNode2.UseVisualStyleBackColor = false;
             // 
             // xcNode1
             // 
+            xcNode1.BackColor = Color.Transparent;
             xcNode1.BaseDim = new Point(0, 0);
             xcNode1.Drag = false;
+            xcNode1.ForeColor = SystemColors.ControlText;
             xcNode1.LastMousePosition = new Point(0, 0);
             xcNode1.Location = new Point(340, 3);
             xcNode1.Name = "xcNode1";
+            xcNode1.Offset = new Point(0, 0);
             xcNode1.Size = new Size(75, 75);
             xcNode1.TabIndex = 0;
             xcNode1.Text = "xcNode1";
-            xcNode1.UseVisualStyleBackColor = true;
+            xcNode1.UseVisualStyleBackColor = false;
             // 
             // Whiteboard
             // 
@@ -243,18 +282,21 @@
             Controls.Add(EditorPanels);
             Controls.Add(AuxControls);
             Controls.Add(menuStrip1);
+            KeyPreview = true;
             MainMenuStrip = menuStrip1;
             Name = "Whiteboard";
             Text = "Whiteboard";
             Load += Whiteboard_Load;
             menuStrip1.ResumeLayout(false);
             menuStrip1.PerformLayout();
+            flowPanelContext.ResumeLayout(false);
             AuxControls.ResumeLayout(false);
             tabPage1.ResumeLayout(false);
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)HistorySlider).EndInit();
             EditorPanels.ResumeLayout(false);
+            CharactersPane.ResumeLayout(false);
             FlowPane.ResumeLayout(false);
             FlowPanel.ResumeLayout(false);
             ResumeLayout(false);
@@ -264,6 +306,7 @@
         #endregion
 
         private MenuStrip menuStrip1;
+        private ContextMenuStrip flowPanelContext;
         private ToolStripMenuItem fileToolStripMenuItem;
         private ToolStripMenuItem newToolStripMenuItem;
         private ToolStripMenuItem openToolStripMenuItem;
@@ -283,5 +326,7 @@
         private XCPanel FlowPanel;
         private XCNode xcNode1;
         private XCNode xcNode2;
+        private Panel CharacterPanel;
+        private ToolStripMenuItem flowPanelNewNode;
     }
 }
