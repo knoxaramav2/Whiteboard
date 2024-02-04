@@ -1,15 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Drawing.Drawing2D;
-using System.Linq;
-using System.Reflection.Metadata.Ecma335;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
 using Whiteboard.Util;
 
-namespace Whiteboard
+namespace Whiteboard.Controls
 {
     public interface IXControl
     {
@@ -150,7 +143,7 @@ namespace Whiteboard
             Drag = false;
             CurrScale = 1f;
             DoubleBuffered = true;
-            BMBuffer = new(1 ,1);
+            BMBuffer = new(1, 1);
             GBuffer = Graphics.FromImage(BMBuffer);
             FwdNodes = [];
 
@@ -216,7 +209,7 @@ namespace Whiteboard
         protected override void OnMouseMove(MouseEventArgs e)
         {
             var diff = new Point(
-                e.Location.X - LastPosition.X, 
+                e.Location.X - LastPosition.X,
                 e.Location.Y - LastPosition.Y);
             Pan(diff.X, diff.Y);
             LastPosition = e.Location;
@@ -231,7 +224,7 @@ namespace Whiteboard
 
         protected override void OnMouseWheel(MouseEventArgs e)
         {
-            Zoom((e.Delta / 120) * SCALE_CONST);
+            Zoom(e.Delta / 120 * SCALE_CONST);
             base.OnMouseWheel(e);
         }
 
@@ -239,8 +232,8 @@ namespace Whiteboard
         {
             Offset = new Point(x, y);
         }
-    
-        public void AddNode(string text="")
+
+        public void AddNode(string text = "")
         {
             var cSz = (int)(75 * CurrScale);
             var node = new XCNode

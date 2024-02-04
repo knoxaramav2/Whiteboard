@@ -1,6 +1,8 @@
-﻿namespace Whiteboard
+﻿using Whiteboard.Controls;
+
+namespace Whiteboard
 {
-    partial class Whiteboard
+    partial class WhiteboardForm
     {
         /// <summary>
         ///  Required designer variable.
@@ -29,7 +31,7 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Whiteboard));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(WhiteboardForm));
             menuStrip1 = new MenuStrip();
             fileToolStripMenuItem = new ToolStripMenuItem();
             newToolStripMenuItem = new ToolStripMenuItem();
@@ -47,8 +49,10 @@
             panel1 = new Panel();
             HistorySlider = new TrackBar();
             EditorPanels = new TabControl();
-            CharactersPane = new TabPage();
+            CharactersSplitPane = new TabPage();
             CharacterPanel = new Panel();
+            CharSplit = new SplitContainer();
+            CharacterPortrait = new PictureBox();
             FlowPane = new TabPage();
             FlowPanel = new XCPanel();
             xcNode2 = new XCNode();
@@ -60,7 +64,12 @@
             panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)HistorySlider).BeginInit();
             EditorPanels.SuspendLayout();
-            CharactersPane.SuspendLayout();
+            CharactersSplitPane.SuspendLayout();
+            CharacterPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)CharSplit).BeginInit();
+            CharSplit.Panel1.SuspendLayout();
+            CharSplit.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)CharacterPortrait).BeginInit();
             FlowPane.SuspendLayout();
             FlowPanel.SuspendLayout();
             SuspendLayout();
@@ -191,7 +200,7 @@
             // EditorPanels
             // 
             EditorPanels.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            EditorPanels.Controls.Add(CharactersPane);
+            EditorPanels.Controls.Add(CharactersSplitPane);
             EditorPanels.Controls.Add(FlowPane);
             EditorPanels.Location = new Point(0, 27);
             EditorPanels.Name = "EditorPanels";
@@ -199,25 +208,48 @@
             EditorPanels.Size = new Size(800, 304);
             EditorPanels.TabIndex = 2;
             // 
-            // CharactersPane
+            // CharactersSplitPane
             // 
-            CharactersPane.BackColor = Color.Transparent;
-            CharactersPane.Controls.Add(CharacterPanel);
-            CharactersPane.Location = new Point(4, 24);
-            CharactersPane.Name = "CharactersPane";
-            CharactersPane.Padding = new Padding(3);
-            CharactersPane.Size = new Size(792, 276);
-            CharactersPane.TabIndex = 0;
-            CharactersPane.Text = "Characters";
+            CharactersSplitPane.BackColor = Color.Transparent;
+            CharactersSplitPane.Controls.Add(CharacterPanel);
+            CharactersSplitPane.Location = new Point(4, 24);
+            CharactersSplitPane.Name = "CharactersSplitPane";
+            CharactersSplitPane.Padding = new Padding(3);
+            CharactersSplitPane.Size = new Size(792, 276);
+            CharactersSplitPane.TabIndex = 0;
+            CharactersSplitPane.Text = "Characters";
             // 
             // CharacterPanel
             // 
             CharacterPanel.BackColor = Color.RosyBrown;
+            CharacterPanel.Controls.Add(CharSplit);
             CharacterPanel.Dock = DockStyle.Fill;
             CharacterPanel.Location = new Point(3, 3);
             CharacterPanel.Name = "CharacterPanel";
             CharacterPanel.Size = new Size(786, 270);
             CharacterPanel.TabIndex = 0;
+            // 
+            // CharSplit
+            // 
+            CharSplit.Dock = DockStyle.Fill;
+            CharSplit.Location = new Point(0, 0);
+            CharSplit.Name = "CharSplit";
+            // 
+            // CharSplit.Panel1
+            // 
+            CharSplit.Panel1.Controls.Add(CharacterPortrait);
+            CharSplit.Size = new Size(786, 270);
+            CharSplit.SplitterDistance = 294;
+            CharSplit.TabIndex = 0;
+            // 
+            // CharacterPortrait
+            // 
+            CharacterPortrait.BackgroundImage = (Image)resources.GetObject("CharacterPortrait.BackgroundImage");
+            CharacterPortrait.Location = new Point(0, 2);
+            CharacterPortrait.Name = "CharacterPortrait";
+            CharacterPortrait.Size = new Size(160, 160);
+            CharacterPortrait.TabIndex = 0;
+            CharacterPortrait.TabStop = false;
             // 
             // FlowPane
             // 
@@ -238,7 +270,6 @@
             FlowPanel.Controls.Add(xcNode2);
             FlowPanel.Controls.Add(xcNode1);
             FlowPanel.Dock = DockStyle.Fill;
-            FlowPanel.FwdNodes = (List<Whiteboard.IXControl>)resources.GetObject("FlowPanel.FwdNodes");
             FlowPanel.Location = new Point(3, 3);
             FlowPanel.Name = "FlowPanel";
             FlowPanel.Offset = new Point(0, 0);
@@ -296,7 +327,12 @@
             panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)HistorySlider).EndInit();
             EditorPanels.ResumeLayout(false);
-            CharactersPane.ResumeLayout(false);
+            CharactersSplitPane.ResumeLayout(false);
+            CharacterPanel.ResumeLayout(false);
+            CharSplit.Panel1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)CharSplit).EndInit();
+            CharSplit.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)CharacterPortrait).EndInit();
             FlowPane.ResumeLayout(false);
             FlowPanel.ResumeLayout(false);
             ResumeLayout(false);
@@ -321,12 +357,14 @@
         private Panel panel1;
         private TrackBar HistorySlider;
         private TabControl EditorPanels;
-        private TabPage CharactersPane;
+        private TabPage CharactersSplitPane;
         private TabPage FlowPane;
         private XCPanel FlowPanel;
         private XCNode xcNode1;
         private XCNode xcNode2;
         private Panel CharacterPanel;
         private ToolStripMenuItem flowPanelNewNode;
+        private SplitContainer CharSplit;
+        private PictureBox CharacterPortrait;
     }
 }

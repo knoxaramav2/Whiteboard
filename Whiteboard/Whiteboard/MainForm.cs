@@ -1,13 +1,11 @@
-using System.ComponentModel;
 using System.Diagnostics;
-using System.Runtime.InteropServices;
 using Whiteboard.Controls;
 
 namespace Whiteboard
 {
-    public partial class Whiteboard : Form
+    public partial class WhiteboardForm : Form
     {
-        public Whiteboard()
+        public WhiteboardForm()
         {
             InitializeComponent();
             FlowPanel.Init();
