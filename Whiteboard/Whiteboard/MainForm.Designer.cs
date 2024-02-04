@@ -477,7 +477,7 @@ namespace Whiteboard
             FlowPane.Location = new Point(4, 24);
             FlowPane.Name = "FlowPane";
             FlowPane.Padding = new Padding(3);
-            FlowPane.Size = new Size(872, 414);
+            FlowPane.Size = new Size(872, 417);
             FlowPane.TabIndex = 1;
             FlowPane.Text = "Flow";
             // 
@@ -493,7 +493,7 @@ namespace Whiteboard
             FlowPanel.Location = new Point(3, 3);
             FlowPanel.Name = "FlowPanel";
             FlowPanel.Offset = new Point(0, 0);
-            FlowPanel.Size = new Size(866, 408);
+            FlowPanel.Size = new Size(866, 411);
             FlowPanel.TabIndex = 0;
             // 
             // xcNode2
