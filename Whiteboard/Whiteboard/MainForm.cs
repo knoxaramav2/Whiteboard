@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using Whiteboard.Controls;
+using Whiteboard.Util;
 
 namespace Whiteboard
 {
@@ -55,6 +56,19 @@ namespace Whiteboard
         {
             var res = Prompts.NewNodeDialog("Create new flow node", "Create");
             if (!string.IsNullOrEmpty(res)) { FlowPanel.AddNode(res); }
+        }
+
+        private void ImageDialog_FileOk(object sender, EventArgs e)
+        {
+            ImageDialog.Filter = "Image File (*.png;*.jpg;*.jpeg)|*.png;*.jpg;*.jpeg";
+            ImageDialog.Title = "Portrait Image";
+            if (ImageDialog.ShowDialog() == DialogResult.OK)
+            {
+                var fileName = ImageDialog.FileName;
+                var img = Image.FromFile(fileName);
+                var sz = CharacterPortrait.Size;
+                CharacterPortrait.BackgroundImage = ImageHelper.Resize(img, sz.Width, sz.Height);
+            }
         }
     }
 }
