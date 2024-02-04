@@ -53,6 +53,7 @@ namespace Whiteboard
             CharactersSplitPane = new TabPage();
             CharacterPanel = new Panel();
             CharSplit = new SplitContainer();
+            CharacterInfoSelect = new ComboBox();
             label2 = new Label();
             GenderSelect = new ComboBox();
             Notes = new TextBox();
@@ -194,7 +195,7 @@ namespace Whiteboard
             // 
             AuxControls.Controls.Add(tabPage1);
             AuxControls.Dock = DockStyle.Bottom;
-            AuxControls.Location = new Point(0, 468);
+            AuxControls.Location = new Point(0, 471);
             AuxControls.Name = "AuxControls";
             AuxControls.SelectedIndex = 0;
             AuxControls.Size = new Size(880, 120);
@@ -239,7 +240,7 @@ namespace Whiteboard
             EditorPanels.Location = new Point(0, 27);
             EditorPanels.Name = "EditorPanels";
             EditorPanels.SelectedIndex = 0;
-            EditorPanels.Size = new Size(880, 442);
+            EditorPanels.Size = new Size(880, 445);
             EditorPanels.TabIndex = 2;
             // 
             // CharactersSplitPane
@@ -249,7 +250,7 @@ namespace Whiteboard
             CharactersSplitPane.Location = new Point(4, 24);
             CharactersSplitPane.Name = "CharactersSplitPane";
             CharactersSplitPane.Padding = new Padding(3);
-            CharactersSplitPane.Size = new Size(872, 414);
+            CharactersSplitPane.Size = new Size(872, 417);
             CharactersSplitPane.TabIndex = 0;
             CharactersSplitPane.Text = "Characters";
             // 
@@ -260,7 +261,7 @@ namespace Whiteboard
             CharacterPanel.Dock = DockStyle.Fill;
             CharacterPanel.Location = new Point(3, 3);
             CharacterPanel.Name = "CharacterPanel";
-            CharacterPanel.Size = new Size(866, 408);
+            CharacterPanel.Size = new Size(866, 411);
             CharacterPanel.TabIndex = 0;
             // 
             // CharSplit
@@ -274,6 +275,7 @@ namespace Whiteboard
             // CharSplit.Panel1
             // 
             CharSplit.Panel1.BackColor = Color.Transparent;
+            CharSplit.Panel1.Controls.Add(CharacterInfoSelect);
             CharSplit.Panel1.Controls.Add(label2);
             CharSplit.Panel1.Controls.Add(GenderSelect);
             CharSplit.Panel1.Controls.Add(Notes);
@@ -285,9 +287,17 @@ namespace Whiteboard
             // CharSplit.Panel2
             // 
             CharSplit.Panel2.Controls.Add(tableLayoutPanel1);
-            CharSplit.Size = new Size(866, 408);
+            CharSplit.Size = new Size(866, 411);
             CharSplit.SplitterDistance = 323;
             CharSplit.TabIndex = 0;
+            // 
+            // CharacterInfoSelect
+            // 
+            CharacterInfoSelect.FormattingEnabled = true;
+            CharacterInfoSelect.Location = new Point(3, 164);
+            CharacterInfoSelect.Name = "CharacterInfoSelect";
+            CharacterInfoSelect.Size = new Size(158, 23);
+            CharacterInfoSelect.TabIndex = 6;
             // 
             // label2
             // 
@@ -316,7 +326,7 @@ namespace Whiteboard
             Notes.AcceptsReturn = true;
             Notes.AcceptsTab = true;
             Notes.Dock = DockStyle.Bottom;
-            Notes.Location = new Point(0, 306);
+            Notes.Location = new Point(0, 309);
             Notes.Multiline = true;
             Notes.Name = "Notes";
             Notes.PlaceholderText = "Notes";
@@ -385,7 +395,7 @@ namespace Whiteboard
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
-            tableLayoutPanel1.Size = new Size(529, 165);
+            tableLayoutPanel1.Size = new Size(529, 168);
             tableLayoutPanel1.TabIndex = 0;
             // 
             // label3
@@ -440,7 +450,7 @@ namespace Whiteboard
             textBox3.Multiline = true;
             textBox3.Name = "textBox3";
             textBox3.PlaceholderText = "Note";
-            textBox3.Size = new Size(215, 109);
+            textBox3.Size = new Size(215, 112);
             textBox3.TabIndex = 5;
             // 
             // NoteTableInsertBtn
@@ -451,7 +461,7 @@ namespace Whiteboard
             NoteTableInsertBtn.FlatAppearance.BorderSize = 0;
             NoteTableInsertBtn.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             NoteTableInsertBtn.ForeColor = Color.Green;
-            NoteTableInsertBtn.Location = new Point(499, 135);
+            NoteTableInsertBtn.Location = new Point(499, 138);
             NoteTableInsertBtn.Margin = new Padding(0);
             NoteTableInsertBtn.Name = "NoteTableInsertBtn";
             NoteTableInsertBtn.Size = new Size(30, 30);
@@ -525,12 +535,13 @@ namespace Whiteboard
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(880, 588);
+            ClientSize = new Size(880, 591);
             Controls.Add(EditorPanels);
             Controls.Add(AuxControls);
             Controls.Add(menuStrip1);
             KeyPreview = true;
             MainMenuStrip = menuStrip1;
+            MinimumSize = new Size(890, 630);
             Name = "WhiteboardForm";
             Text = "Whiteboard";
             Load += Whiteboard_Load;
@@ -600,5 +611,6 @@ namespace Whiteboard
         private Button NoteTableInsertBtn;
         private Label label5;
         private TextBox textBox3;
+        private ComboBox CharacterInfoSelect;
     }
 }
