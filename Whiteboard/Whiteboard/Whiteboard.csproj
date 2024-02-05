@@ -25,7 +25,6 @@
 
   <ItemGroup>
     <Folder Include="Rsc\" />
-    <Folder Include="State\" />
   </ItemGroup>
 
   <ItemGroup>

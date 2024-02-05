@@ -7,7 +7,7 @@ namespace Whiteboard
 {
     public partial class WhiteboardForm : Form
     {
-        GlobalState GlobalState;
+        readonly GlobalState GlobalState;
         StoryState? StoryState;
 
         public WhiteboardForm()
@@ -15,7 +15,6 @@ namespace Whiteboard
             InitializeComponent();
             FlowPanel.Init();
             SetUIEnabled(false);
-
             GlobalState = GlobalState.Load();
             if (!string.IsNullOrEmpty(GlobalState.LastSavePath))
             {
@@ -35,6 +34,13 @@ namespace Whiteboard
             SetStory(save);
         }
 
+        private void SaveStory()
+        {
+            if (StoryState == null) { return; }
+            StoryState.SetNodeFlow(FlowPanel.GetFlowState());
+            StoryState.Save();
+        }
+
         private void SetUIEnabled(bool lockControls)
         {
             AuxControls.Enabled = lockControls;
@@ -47,6 +53,7 @@ namespace Whiteboard
         {
             StoryState = storyState;
             GlobalState.SetCurrentStory(StoryState);
+            FlowPanel.SetFlowState(StoryState.NodeFlow);
             Text = StoryState.ProfileName;
             SetUIEnabled(true);
         }
@@ -101,7 +108,7 @@ namespace Whiteboard
 
         private void SaveToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            SaveStory();
         }
 
         private void HistorySlider_Scroll(object sender, EventArgs e)

@@ -35,6 +35,13 @@ namespace Whiteboard.State
         {
             LastStory = state;
             LastSavePath = LastStory?.FilePath ?? string.Empty;
+            AddRecentSave(LastSavePath);
+        }
+
+        public void AddRecentSave(string path)
+        {
+            if (RecentSaves.Contains(path)) return;
+            RecentSaves.Add(path);
         }
 
         public void Save()

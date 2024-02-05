@@ -1,11 +1,13 @@
 ﻿using System.Diagnostics;
 using System.Drawing.Drawing2D;
+using Whiteboard.State;
 using Whiteboard.Util;
 
 namespace Whiteboard.Controls
 {
     public interface IXControl
     {
+        Guid Guid { get; }
         List<IXControl> FwdNodes { get; }
         bool Contains(IXControl control);
         IXControl? IXParent { get; }
@@ -28,6 +30,7 @@ namespace Whiteboard.Controls
 
     public class XCNode : Button, IXControl
     {
+        public Guid Guid { get; set; }
         public IXControl? IXParent { get; private set; }
         public Point LastMousePosition { get; set; }
         public Point Offset { get; set; }
@@ -42,6 +45,7 @@ namespace Whiteboard.Controls
 
         public XCNode()
         {
+            Guid = Guid.NewGuid();
             Drag = false;
             FwdNodes = [];
         }
@@ -133,6 +137,18 @@ namespace Whiteboard.Controls
         {
             BackColor = state ? SelectColor : UnselectColor;
         }
+
+        public NodeState ToState()
+        {
+            return new NodeState(
+                Guid,
+                Text, new Size(BaseDim), Location, Offset,
+                FwdNodes
+                    .Where(x => x is XCNode)
+                    .Select(x => ((XCNode)x).ToState())
+                    .ToList()
+                    );
+        }
     }
 
     public class XCPanel : Panel, IXControl, IXContainer
@@ -140,9 +156,10 @@ namespace Whiteboard.Controls
         private Bitmap BMBuffer;
         private Graphics GBuffer;
         public Button follow;
+        public Guid Guid { get; private set; }
         public IXControl? IXParent { get; private set; }
         public Point Offset { get; set; }
-        private Point LastPosition;
+        private Point LastMousePosition;
         private bool Drag { get; set; }
         private float CurrScale { get; set; }
         public IXControl? Selected { get; private set; }
@@ -151,7 +168,8 @@ namespace Whiteboard.Controls
 
         public XCPanel()
         {
-            LastPosition = new Point(0, 0);
+            Guid = Guid.NewGuid();
+            LastMousePosition = new Point(0, 0);
             Selected = null;
             Drag = false;
             CurrScale = 1f;
@@ -185,6 +203,52 @@ namespace Whiteboard.Controls
             }
         }
 
+        public NodeFlow GetFlowState()
+        {
+            List<NodeState> nodes = 
+                FwdNodes.Select(x => ((XCNode)x).ToState())
+                .ToList();
+
+            return new NodeFlow()
+            {
+                Nodes = nodes,
+                Origin = Offset
+            };
+        }
+
+        public void SetFlowState(NodeFlow flow)
+        {
+            FwdNodes.Clear();
+
+            Offset = flow.Origin;
+            foreach(var node in flow.Nodes)
+            {
+                var xnode = new XCNode()
+                {
+                    Guid = node.Id,
+                    Text = node.Text,
+                    Size = node.Size,
+                    Location = node.Loc,
+                    Offset = node.Offset,
+                };
+
+                FwdNodes.Add(xnode);
+                Controls.Add(xnode);
+            }
+
+            foreach(var node in flow.Nodes)
+            {
+                var conGuids = node.Connected.Select(x => x.Id);
+                var connections = FwdNodes.Where(x => conGuids.Contains(x.Guid));
+                var xnode = FwdNodes.First(x => ((XCNode)x).Guid == node.Id);
+                
+                foreach(var con in connections)
+                {
+                    xnode.CoupleControl(con);    
+                }
+            }
+        }
+
         public void Pan(int dx, int dy)
         {
             if (!Drag) { return; }
@@ -215,7 +279,7 @@ namespace Whiteboard.Controls
 
         protected override void OnMouseDown(MouseEventArgs e)
         {
-            LastPosition = e.Location;
+            LastMousePosition = e.Location;
             Drag = true;
             base.OnMouseDown(e);
         }
@@ -223,10 +287,10 @@ namespace Whiteboard.Controls
         protected override void OnMouseMove(MouseEventArgs e)
         {
             var diff = new Point(
-                e.Location.X - LastPosition.X,
-                e.Location.Y - LastPosition.Y);
+                e.Location.X - LastMousePosition.X,
+                e.Location.Y - LastMousePosition.Y);
             Pan(diff.X, diff.Y);
-            LastPosition = e.Location;
+            LastMousePosition = e.Location;
             base.OnMouseMove(e);
         }
 
