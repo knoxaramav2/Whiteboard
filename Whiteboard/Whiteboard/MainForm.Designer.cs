@@ -39,6 +39,7 @@ namespace Whiteboard
             OpenCtx = new ToolStripMenuItem();
             toolStripSeparator1 = new ToolStripSeparator();
             SaveCtx = new ToolStripMenuItem();
+            SaveAsCtx = new ToolStripMenuItem();
             toolStripSeparator2 = new ToolStripSeparator();
             ExitCtx = new ToolStripMenuItem();
             helpToolStripMenuItem = new ToolStripMenuItem();
@@ -73,7 +74,9 @@ namespace Whiteboard
             xcNode2 = new XCNode();
             xcNode1 = new XCNode();
             ImageDialog = new OpenFileDialog();
-            SaveAsCtx = new ToolStripMenuItem();
+            openFileDialog1 = new OpenFileDialog();
+            saveFileDialog1 = new SaveFileDialog();
+            folderBrowserDialog1 = new FolderBrowserDialog();
             DeleteRowBtn = new Button();
             menuStrip1.SuspendLayout();
             flowPanelContext.SuspendLayout();
@@ -130,7 +133,7 @@ namespace Whiteboard
             // 
             NewCtx.Name = "NewCtx";
             NewCtx.ShortcutKeys = Keys.Control | Keys.Shift | Keys.N;
-            NewCtx.Size = new Size(180, 22);
+            NewCtx.Size = new Size(186, 22);
             NewCtx.Text = "New";
             NewCtx.Click += NewToolStripMenuItem_Click;
             // 
@@ -138,32 +141,40 @@ namespace Whiteboard
             // 
             OpenCtx.Name = "OpenCtx";
             OpenCtx.ShortcutKeys = Keys.Control | Keys.O;
-            OpenCtx.Size = new Size(180, 22);
+            OpenCtx.Size = new Size(186, 22);
             OpenCtx.Text = "Open";
             OpenCtx.Click += OpenToolStripMenuItem_Click;
             // 
             // toolStripSeparator1
             // 
             toolStripSeparator1.Name = "toolStripSeparator1";
-            toolStripSeparator1.Size = new Size(177, 6);
+            toolStripSeparator1.Size = new Size(183, 6);
             // 
             // SaveCtx
             // 
             SaveCtx.Name = "SaveCtx";
             SaveCtx.ShortcutKeys = Keys.Control | Keys.S;
-            SaveCtx.Size = new Size(180, 22);
+            SaveCtx.Size = new Size(186, 22);
             SaveCtx.Text = "Save";
             SaveCtx.Click += SaveToolStripMenuItem_Click;
+            // 
+            // SaveAsCtx
+            // 
+            SaveAsCtx.Name = "SaveAsCtx";
+            SaveAsCtx.ShortcutKeys = Keys.Control | Keys.Shift | Keys.S;
+            SaveAsCtx.Size = new Size(186, 22);
+            SaveAsCtx.Text = "Save As";
+            SaveAsCtx.Click += SaveAsCtx_Click;
             // 
             // toolStripSeparator2
             // 
             toolStripSeparator2.Name = "toolStripSeparator2";
-            toolStripSeparator2.Size = new Size(177, 6);
+            toolStripSeparator2.Size = new Size(183, 6);
             // 
             // ExitCtx
             // 
             ExitCtx.Name = "ExitCtx";
-            ExitCtx.Size = new Size(180, 22);
+            ExitCtx.Size = new Size(186, 22);
             ExitCtx.Text = "Exit";
             ExitCtx.Click += ExitToolStripMenuItem_Click;
             // 
@@ -535,13 +546,9 @@ namespace Whiteboard
             xcNode1.Text = "xcNode1";
             xcNode1.UseVisualStyleBackColor = false;
             // 
-            // SaveAsCtx
+            // openFileDialog1
             // 
-            SaveAsCtx.Name = "SaveAsCtx";
-            SaveAsCtx.ShortcutKeys = Keys.Control | Keys.Shift | Keys.S;
-            SaveAsCtx.Size = new Size(186, 22);
-            SaveAsCtx.Text = "Save As";
-            SaveAsCtx.Click += SaveAsCtx_Click;
+            openFileDialog1.FileName = "openFileDialog1";
             // 
             // WhiteboardForm
             // 
@@ -625,5 +632,8 @@ namespace Whiteboard
         private TextBox textBox3;
         private ComboBox CharacterInfoSelect;
         private ToolStripMenuItem SaveAsCtx;
+        private OpenFileDialog openFileDialog1;
+        private SaveFileDialog saveFileDialog1;
+        private FolderBrowserDialog folderBrowserDialog1;
     }
 }
