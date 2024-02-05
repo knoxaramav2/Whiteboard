@@ -4,7 +4,7 @@ namespace Whiteboard.Controls
 {
     internal class Prompts
     {
-        public static string NewNodeDialog(string text, string caption)
+        public static string InputDialog(string text, string caption)
         {
             var prompt = new Form()
             {
@@ -32,6 +32,35 @@ namespace Whiteboard.Controls
             prompt.CancelButton = cancel;
 
             return prompt.ShowDialog() == DialogResult.OK ? input.Text : "";
+        }
+
+        public static DialogResult ConfirmDialog(string text, string caption)
+        {
+            var margin = 25;
+
+            var prompt = new Form()
+            {
+                Width = 300,
+                Height = 150,
+                FormBorderStyle = FormBorderStyle.FixedDialog,
+                Text = caption,
+                StartPosition = FormStartPosition.CenterScreen,
+            };
+
+            var prmptLabel = new Label() { Left = margin, Top = 20, Text = text, Width = prompt.Width-margin };
+            var cancel = new Button() { Text = "Cancel", Left = margin, Width = 80, Top = 75 };
+            var confirm = new Button() { Text = "OK", Left = prompt.Width - margin-80, Width = 80, Top = 75, DialogResult = DialogResult.OK };
+
+            cancel.Click += (sender, e) => { prompt.Close(); };
+            confirm.Click += (sender, e) => { prompt.Close(); Debug.WriteLine("ACCEPT"); };
+
+            prompt.Controls.Add(prmptLabel);
+            prompt.Controls.Add(cancel);
+            prompt.Controls.Add(confirm);
+            prompt.AcceptButton = confirm;
+            prompt.CancelButton = cancel;
+
+            return prompt.ShowDialog();
         }
     }
 }

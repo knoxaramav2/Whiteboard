@@ -116,8 +116,16 @@ namespace Whiteboard
 
         private void FlowPanelNewNode_Click(object sender, EventArgs e)
         {
-            var res = Prompts.NewNodeDialog("Create new flow node", "Create");
+            var res = Prompts.InputDialog("Create new flow node", "Create");
             if (!string.IsNullOrEmpty(res)) { FlowPanel.AddNode(res); }
+        }
+
+        private void FlowPanelDeleteNode_Click(object sender, EventArgs e)
+        {
+            if (Prompts.ConfirmDialog("This operation cannot be undone.", "Delete") == DialogResult.OK)
+            {
+                FlowPanel.DeleteNode();
+            }
         }
 
         private void ImageDialog_FileOk(object sender, EventArgs e)
@@ -137,5 +145,6 @@ namespace Whiteboard
         {
 
         }
+
     }
 }

@@ -46,6 +46,7 @@ namespace Whiteboard
             aboutToolStripMenuItem = new ToolStripMenuItem();
             flowPanelContext = new ContextMenuStrip(components);
             flowPanelNewNode = new ToolStripMenuItem();
+            flowPanelDeleteNode = new ToolStripMenuItem();
             AuxControls = new TabControl();
             tabPage1 = new TabPage();
             panel1 = new Panel();
@@ -71,8 +72,6 @@ namespace Whiteboard
             NoteTableInsertBtn = new Button();
             FlowPane = new TabPage();
             FlowPanel = new XCPanel();
-            xcNode2 = new XCNode();
-            xcNode1 = new XCNode();
             ImageDialog = new OpenFileDialog();
             openFileDialog1 = new OpenFileDialog();
             saveFileDialog1 = new SaveFileDialog();
@@ -94,7 +93,6 @@ namespace Whiteboard
             ((System.ComponentModel.ISupportInitialize)CharacterPortrait).BeginInit();
             tableLayoutPanel1.SuspendLayout();
             FlowPane.SuspendLayout();
-            FlowPanel.SuspendLayout();
             SuspendLayout();
             // 
             // DeleteRowBtn
@@ -194,9 +192,9 @@ namespace Whiteboard
             // 
             // flowPanelContext
             // 
-            flowPanelContext.Items.AddRange(new ToolStripItem[] { flowPanelNewNode });
+            flowPanelContext.Items.AddRange(new ToolStripItem[] { flowPanelNewNode, flowPanelDeleteNode });
             flowPanelContext.Name = "FlowPanelContext";
-            flowPanelContext.Size = new Size(174, 26);
+            flowPanelContext.Size = new Size(174, 48);
             // 
             // flowPanelNewNode
             // 
@@ -205,6 +203,14 @@ namespace Whiteboard
             flowPanelNewNode.Size = new Size(173, 22);
             flowPanelNewNode.Text = "New Node";
             flowPanelNewNode.Click += FlowPanelNewNode_Click;
+            // 
+            // flowPanelDeleteNode
+            // 
+            flowPanelDeleteNode.Name = "flowPanelDeleteNode";
+            flowPanelDeleteNode.ShortcutKeys = Keys.Delete;
+            flowPanelDeleteNode.Size = new Size(173, 22);
+            flowPanelDeleteNode.Text = "Delete Node";
+            flowPanelDeleteNode.Click += FlowPanelDeleteNode_Click;
             // 
             // AuxControls
             // 
@@ -501,8 +507,6 @@ namespace Whiteboard
             FlowPanel.BackColor = Color.SteelBlue;
             FlowPanel.BorderStyle = BorderStyle.FixedSingle;
             FlowPanel.ContextMenuStrip = flowPanelContext;
-            FlowPanel.Controls.Add(xcNode2);
-            FlowPanel.Controls.Add(xcNode1);
             FlowPanel.Dock = DockStyle.Fill;
             FlowPanel.FwdNodes = null;
             FlowPanel.Location = new Point(3, 3);
@@ -510,41 +514,6 @@ namespace Whiteboard
             FlowPanel.Offset = new Point(0, 0);
             FlowPanel.Size = new Size(866, 411);
             FlowPanel.TabIndex = 0;
-            // 
-            // xcNode2
-            // 
-            xcNode2.BackColor = Color.Silver;
-            xcNode2.BackgroundImageLayout = ImageLayout.None;
-            xcNode2.BaseDim = new Point(0, 0);
-            xcNode2.Drag = false;
-            xcNode2.FlatAppearance.BorderSize = 0;
-            xcNode2.FlatStyle = FlatStyle.Flat;
-            xcNode2.LastMousePosition = new Point(0, 0);
-            xcNode2.Location = new Point(193, 149);
-            xcNode2.Name = "xcNode2";
-            xcNode2.Offset = new Point(0, 0);
-            xcNode2.Size = new Size(75, 75);
-            xcNode2.TabIndex = 1;
-            xcNode2.Text = "xcNode2";
-            xcNode2.UseVisualStyleBackColor = false;
-            // 
-            // xcNode1
-            // 
-            xcNode1.BackColor = Color.Silver;
-            xcNode1.BackgroundImageLayout = ImageLayout.None;
-            xcNode1.BaseDim = new Point(0, 0);
-            xcNode1.Drag = false;
-            xcNode1.FlatAppearance.BorderSize = 0;
-            xcNode1.FlatStyle = FlatStyle.Flat;
-            xcNode1.ForeColor = SystemColors.ControlText;
-            xcNode1.LastMousePosition = new Point(0, 0);
-            xcNode1.Location = new Point(340, 3);
-            xcNode1.Name = "xcNode1";
-            xcNode1.Offset = new Point(0, 0);
-            xcNode1.Size = new Size(75, 75);
-            xcNode1.TabIndex = 0;
-            xcNode1.Text = "xcNode1";
-            xcNode1.UseVisualStyleBackColor = false;
             // 
             // openFileDialog1
             // 
@@ -584,7 +553,6 @@ namespace Whiteboard
             tableLayoutPanel1.ResumeLayout(false);
             tableLayoutPanel1.PerformLayout();
             FlowPane.ResumeLayout(false);
-            FlowPanel.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -610,8 +578,6 @@ namespace Whiteboard
         private TabPage CharactersSplitPane;
         private TabPage FlowPane;
         private XCPanel FlowPanel;
-        private XCNode xcNode1;
-        private XCNode xcNode2;
         private Panel CharacterPanel;
         private ToolStripMenuItem flowPanelNewNode;
         private SplitContainer CharSplit;
@@ -635,5 +601,6 @@ namespace Whiteboard
         private OpenFileDialog openFileDialog1;
         private SaveFileDialog saveFileDialog1;
         private FolderBrowserDialog folderBrowserDialog1;
+        private ToolStripMenuItem flowPanelDeleteNode;
     }
 }

@@ -267,6 +267,26 @@ namespace Whiteboard.Controls
             FwdNodes.Add(node);
         }
 
+        public void DeleteNode(IXControl? toDelete = null)
+        {
+            toDelete ??= Selected;
+            if (toDelete == null) { return; }
+
+            foreach(var node in FwdNodes) 
+            {
+                if (IsBound(toDelete, node))
+                {
+                    Decouple(toDelete, node);
+                }
+            }
+
+            FwdNodes.Remove(toDelete);
+            Controls.Remove((XCNode)toDelete);
+
+            return;
+
+        }
+
         public void SetSelected(IXControl selection)
         {
             if (Selected == selection) { return; }
